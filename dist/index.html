@@ -26,7 +26,7 @@
       if (url && url.length > 1) {
         url = decodeURIComponent(url[1]);
       } else {
-        url = "http://petstore.swagger.io/v2/swagger.json";
+        url = "../sms.spec.json";
       }
       window.swaggerUi = new SwaggerUi({
         url: url,
@@ -59,6 +59,8 @@
         if(key && key.trim() != "") {
             var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization("api_key", key, "query");
             window.swaggerUi.api.clientAuthorizations.add("api_key", apiKeyAuth);
+            window.swaggerUi.api.clientAuthorizations.add("Authorization", new PasswordAuthorization("basic_auth", "b71947aa8d21427842bda9e1673d77f1", "apisec"));
+            console.log(new PasswordAuthorization("basic_auth", "b71947aa8d21427842bda9e1673d77f1", "apisec"))
             log("added key " + key);
         }
       }
