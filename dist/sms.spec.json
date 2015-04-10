@@ -1,0 +1,184 @@
+{
+	"swagger": "2.0",
+	"info": {
+		"description": "sample only",
+		"version": "1.0.0",
+		"title": "BurstSMS",
+		"termsOfService": "http://burstsms.com.au",
+		"contact": {
+			"email": "chito@burstsms.com"
+		}
+	},
+	"host": "api.transmitsms.com",
+	"basePath": "/",
+	"tags": [{
+		"name": "SMS",
+		"description": "Send sms"
+	}],
+	"schemes": ["https"],
+	"paths": {
+		"/send-sms.json": {
+			"post": {
+				"tags": ["message"],
+				"summary": "Update an existing sms",
+				"description": "",
+				"operationId": "send",
+				"consumes": ["application/x-www-form-urlencoded"],
+				"produces": ["application/json"],
+				"parameters": [{
+					"in": "query",
+					"name": "message",
+					"type": "string",
+					"description": "Message text"
+				}, {
+					"in": "query",
+					"name": "to",
+					"type": "string",
+					"description": "Number or set of up to 10,000 numbers to send the SMS to. If your number set has some invalid numbers, they won’t cause validation error, but will be returned as ‘fails’ parameter of the response (see example 3)."
+				}, {
+					"in": "query",
+					"name": "from",
+					"type": "string",
+					"description": "Set the alphanumeric Caller ID"
+				}, {
+					"in": "query",
+					"name": "send_at",
+					"type": "string",
+					"description": "A time in the future to send the message"
+				}, {
+					"in": "query",
+					"name": "list_id",
+					"type": "string",
+					"description": "This ID is the numerical reference to one of your recipient lists"
+				}, {
+					"in": "query",
+					"name": "dlr_callback",
+					"type": "string",
+					"description": "A URL on your system which we can call to notify you of Delivery Receipts. If required, this Parameter can be different for each message sent and will take precedence over the DLR Callback URL supplied by you in the API Settings."
+				}, {
+					"in": "query",
+					"name": "reply_callback",
+					"type": "string",
+					"description": "A URL on your system which we can call to notify you of incoming messages. If required, this parameter can be different and will take precedence over the Reply Callback URL supplied by you on the API Settings."
+				}, {
+					"in": "query",
+					"name": "validity",
+					"type": "integer",
+					"description": "Specify the maximum time to attempt to deliver. In minutes, 0 (zero) implies no limit.",
+					"format": "int32"
+				}, {
+					"in": "query",
+					"name": "replies_to_email",
+					"type": "string",
+					"description": "Specify an email address to send responses to this message. NOTE: specified email must be authorised to send messages via add-email or in your account under the 'Email SMS' section."
+				}, {
+					"in": "query",
+					"name": "from_shared",
+					"type": "string",
+					"description": "Forces sending via the shared number when you have virtual numbers"
+				}, {
+					"in": "header",
+					"name": "Authorization",
+					"description": "in format key secret",
+					"required": true,
+					"type": "string"
+				}],
+				"responses": {
+					"200": {
+						"description": "Message sent",
+						"schema": {
+							"$ref": "#/definitions/Success"
+						}
+					},
+					"default": {
+						"description": "Error sending",
+						"schema": {
+							"$ref": "#/definitions/Error"
+						}
+					}
+				}
+			}
+		}
+	},
+	"securityDefinitions": {
+		"sendsms_auth": {
+			"type": "basic"
+		}
+	},
+	"definitions": {
+		"Success": {
+			"properties": {
+				"message_id": {
+					"type": "string",
+					"description": "Message text"
+				},
+				"send_at": {
+					"type": "string",
+					"description": "Number or set of up to 10,000 numbers to send the SMS to. If your number set has some invalid numbers, they won’t cause validation error, but will be returned as ‘fails’ parameter of the response (see example 3)."
+				},
+				"recipients": {
+					"type": "string",
+					"description": "Set the alphanumeric Caller ID"
+				},
+				"cost": {
+					"type": "string",
+					"description": "Set the alphanumeric Caller ID"
+				},
+				"sms": {
+					"type": "string",
+					"description": "the sms"
+				},
+				"delivery_stats": {
+					"$ref": "#/definitions/DeliveryStats"
+				},
+				"error": {
+					"$ref": "#/definitions/ErrorInfo"
+				}
+			}
+		},
+		"DeliveryStats": {
+			"properties": {
+				"delivered": {
+					"type": "integer",
+					"format": "int32"
+				},
+				"pending": {
+					"type": "integer",
+					"format": "int32"
+				},
+				"bounced": {
+					"type": "integer",
+					"format": "int32"
+				},
+				"responses": {
+					"type": "integer",
+					"format": "int32"
+				},
+				"optouts": {
+					"type": "integer",
+					"format": "int32"
+				}
+			}
+		},
+		"Error": {
+			"properties": {
+				"error": {
+					"$ref": "#/definitions/ErrorInfo",
+					"description": "Message text"
+				}
+			}
+		},
+		"ErrorInfo": {
+			"properties": {
+				"code": {
+					"type": "string",
+					"description": "The code of the error"
+				},
+				"description": {
+					"type": "string",
+					"description": "The description of the error"
+				}
+			}
+		}
+	}
+}
